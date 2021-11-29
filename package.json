@@ -1,4 +1,8 @@
 {
+  "author": {
+    "name": "daichi.suyama",
+    "email": "symdit@gmail.com"
+  },
   "scripts": {
     "build": "webpack",
     "deploy": "yarn build && clasp push",
