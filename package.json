@@ -9,7 +9,7 @@
   "scripts": {
     "deploy": "clasp push"
   },
-  "dependencies": {
-    "@notionhq/client": "^0.4.9"
+  "devDependencies": {
+    "@types/google-apps-script": "^1.0.41"
   }
 }
