@@ -4,8 +4,9 @@ import { Result, SlackField } from './type'
 import { Constants } from './Constants'
 const { SLACK_URL, DATABASE_ID } = Constants
 
-/** 監視対象の列名 */
+/** 監視対象の表示名 */
 const displayColumnName = '契約名'
+/** 監視対象の列名 */
 const targetColumnName = '契約終了日'
 
 const currentDate = new Date()
