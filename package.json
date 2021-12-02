@@ -7,7 +7,8 @@
   "author": "daichi.suyama <symdit@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "deploy": "clasp push"
+    "deploy": "clasp push",
+    "create-app": "clasp create && mv ./appsscript.json ./src/appsscript.json"
   },
   "devDependencies": {
     "@types/google-apps-script": "^1.0.41",
