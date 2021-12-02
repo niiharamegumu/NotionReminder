@@ -1,5 +1,5 @@
 // NOTE: スクリプトプロパティの設定方法
-// https://auto-worker.com/blog/?p=2365
+// [【GAS】コードにAPIトークンやIDのベタ書きを避ける（プロパティサービスの活用） - Qiita](https://qiita.com/massa-potato/items/2209ff367d65c5dd6181)
 
 export namespace Constants {
   /** 投稿したいChannelの名前 */
