@@ -2,10 +2,6 @@
 // [【GAS】コードにAPIトークンやIDのベタ書きを避ける（プロパティサービスの活用） - Qiita](https://qiita.com/massa-potato/items/2209ff367d65c5dd6181)
 
 export namespace Constants {
-  /** 投稿したいChannelの名前 */
-  export const CHANNEL = '#'
-  /** 何の名前でSlackに投稿するか */
-  export const USERNAME = ''
   /** Slackの In Coming Webhook URL */
   export const SLACK_URL = PropertiesService.getScriptProperties().getProperty('SLACK_URL')
   /** 取得対象のNotionのDBのIDを設定してください */

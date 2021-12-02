@@ -2,7 +2,7 @@ import { NotionApi } from './NotionApi'
 import { SlackApi } from './SlackApi'
 import { Result, SlackField } from './type'
 import { Constants } from './Constants'
-const { SLACK_URL, CHANNEL, USERNAME, DATABASE_ID } = Constants
+const { SLACK_URL, DATABASE_ID } = Constants
 
 /** 監視対象の列名 */
 const displayColumnName = '契約名'
@@ -49,5 +49,5 @@ export function doPost() {
     }
   }
   const fields: SlackField[] = checkDeadline(table, targetColumnName, genMessage)
-  SlackApi.sendToSlack(SLACK_URL, CHANNEL, USERNAME, fields, '締切が迫っています')
+  SlackApi.sendToSlack(SLACK_URL, fields, '締切が迫っています')
 }

@@ -1,16 +1,8 @@
 import { SlackField } from './type'
 
 export namespace SlackApi {
-  export const sendToSlack = (
-    url: string,
-    channel: string,
-    username: string,
-    fields: SlackField[],
-    fallback: string
-  ) => {
+  export const sendToSlack = (url: string, fields: SlackField[], fallback: string) => {
     const payload = JSON.stringify({
-      channel: channel,
-      username: username,
       attachments: [
         {
           fallback: fallback,
