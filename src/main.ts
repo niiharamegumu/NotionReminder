@@ -50,5 +50,6 @@ export function doPost() {
     }
   }
   const fields: SlackField[] = checkDeadline(table, targetColumnName, genMessage)
+  if (!fields.length) return
   SlackApi.sendToSlack(SLACK_URL, fields, '締切が迫っています')
 }
