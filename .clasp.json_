@@ -1,4 +1,10 @@
 {
   "scriptId": "",
-  "rootDir": "./src"
+  "rootDir": "./src",
+  "filePushOrder": [
+    "src/Constants.ts",
+    "src/Convert.ts",
+    "src/NotionApi.ts",
+    "src/SlackApi.ts"
+  ]
 }
