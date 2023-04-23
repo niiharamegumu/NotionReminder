@@ -2,7 +2,7 @@ import { NotionApi } from './NotionApi'
 import { SlackApi } from './SlackApi'
 import { Result, SlackField } from './type'
 import { Constants } from './Constants'
-const { SLACK_URL, DATABASE_ID } = Constants
+const { SLACK_URL, DATABASE_ID, PUSH_NOTICE_CARD_TITLE, TARGET_STATUS } = Constants
 
 // テーブルのカラム名をオブジェクトで定義
 const tableColumnObj = {
@@ -12,7 +12,6 @@ const tableColumnObj = {
   noticeDate: '通知日',
   expiredDate: '期限日',
 }
-const popUpTitle = 'PECOFREE 運用リマインド'
 
 // 今日以前の通知日でかつ未対応の通知を行う
 const checkNoticeDate = (table: Result<any>[], genMessage: (row: Result<any>) => SlackField) => {
@@ -36,7 +35,7 @@ const checkNoticeDate = (table: Result<any>[], genMessage: (row: Result<any>) =>
 
 // 未完了で期限切れのタスクを通知する
 export function doPostByNotCompleted() {
-  const table = NotionApi.getDatabase(DATABASE_ID, '未完了')
+  const table = NotionApi.getDatabase(DATABASE_ID, TARGET_STATUS)
   if (!table.length) return
 
   const genMessage = (row: Result<any>): SlackField => {
@@ -53,5 +52,5 @@ export function doPostByNotCompleted() {
   }
   const fields: SlackField[] = checkNoticeDate(table, genMessage)
   if (!fields.length) return
-  SlackApi.sendToSlack(SLACK_URL, fields, popUpTitle)
+  SlackApi.sendToSlack(SLACK_URL, fields, PUSH_NOTICE_CARD_TITLE)
 }
