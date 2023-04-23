@@ -1,6 +1,12 @@
 [![clasp](https://img.shields.io/badge/built%20with-clasp-4285f4.svg)](https://github.com/google/clasp)
 
-# 準備
+# 事前に必要な設定
+
+- slack の incoming app の設定
+- notion のインテグレーション設定
+  - インテグレーション設定後は Notion の DB 作成とインテグレーションとのコネクト設定をする必要がある。
+
+# 環境構築
 
 ## 1. ログイン
 
@@ -8,12 +14,8 @@
 
 ## 2. プロジェクトの作成
 
-`yarn create-app` で GAS のプロジェクトを作成
+`npm run create-app` で GAS のプロジェクトを作成
 `.clasp.json` が作成されます。
-
-> 🔔 既存のプロジェクトで使う場合
->
-> `.clasp.json_`を `.clasp.json`にリネームし、`scriptId`に AppScript の ScriptID を設定してください
 
 > 🔔 タイムゾーンの設定
 >
@@ -34,8 +36,12 @@
 
 # デプロイ
 
-`yarn deploy`
+`npm run deploy`
 
 > 🔔 環境変数・トークンなどを登録する場合
 >
 > [【GAS】コードに API トークンや ID のベタ書きを避ける（プロパティサービスの活用） - Qiita](https://qiita.com/massa-potato/items/2209ff367d65c5dd6181)
+
+## 謝辞
+
+このリポジトリは[Suyama-Daichi/NotionReminder](https://github.com/Suyama-Daichi/NotionReminder)をもとに独自に手を加えたものです。ありがとうございます 🙇‍♂️
