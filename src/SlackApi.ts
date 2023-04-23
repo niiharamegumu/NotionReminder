@@ -6,7 +6,7 @@ export namespace SlackApi {
       attachments: [
         {
           fallback: fallback,
-          color: '#FFC800', // 好きな色に変更してください
+          color: '#1e90ff',
           fields: fields,
           mrkdwn_in: ['fields'],
         },

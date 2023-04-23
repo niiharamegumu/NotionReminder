@@ -4,52 +4,54 @@ import { Result, SlackField } from './type'
 import { Constants } from './Constants'
 const { SLACK_URL, DATABASE_ID } = Constants
 
-/** 監視対象の表示名 */
-const displayColumnName = '契約名'
-/** 監視対象の列名 */
-const targetColumnName = '契約終了日'
+// テーブルのカラム名をオブジェクトで定義
+const tableColumnObj = {
+  title: 'タイトル',
+  description: '内容',
+  status: 'ステータス',
+  noticeDate: '通知日',
+  expiredDate: '期限日',
+}
+const popUpTitle = 'PECOFREE 運用リマインド'
 
-const currentDate = new Date()
-currentDate.setMonth(currentDate.getMonth() + 1)
-
-const checkDeadline = (
-  table: Result<any>[],
-  columnName: string,
-  genMessage: (row: Result<any>, term: string) => SlackField
-) => {
+// 今日以前の通知日でかつ未対応の通知を行う
+const checkNoticeDate = (table: Result<any>[], genMessage: (row: Result<any>) => SlackField) => {
   const fields: SlackField[] = table.map((row) => {
-    const dates = row.properties[columnName]?.date
-    if (!dates) return
-    let termString: string
-    const date = new Date(dates.start)
-    const term = (currentDate.getTime() - date.getTime()) / 86400000
-    if (term < 0) {
-      return
-    } else if (term < 1) {
-      termString = '1日'
-    } else if (term < 7) {
-      termString = '1週間'
-      console.log(date)
-    } else if (term < 31) {
-      termString = '1ヶ月'
-    } else {
-      return
-    }
-    return genMessage(row, termString)
-  })
+    const title = row.properties[tableColumnObj.title]?.title[0]?.plain_text
+    const description = row.properties[tableColumnObj.description]?.rich_text[0]?.plain_text
+    const status = row.properties[tableColumnObj.status]?.select?.name
+    const noticeDate = row.properties[tableColumnObj.noticeDate]?.date
+    const expiredDate = row.properties[tableColumnObj.expiredDate]?.date
+    if (!title || !description || !status || !noticeDate || !expiredDate) return
 
+    // 今日の日付より後の通知日の場合は通知しない
+    const notice = new Date(noticeDate.start)
+    const today = new Date()
+    if (notice.getTime() > today.getTime()) return
+
+    return genMessage(row)
+  })
   return fields.filter((field) => field)
 }
 
-export function doPost() {
-  const table = NotionApi.getDatabase(DATABASE_ID)
-  const genMessage = (row: Result<any>, term: string): SlackField => {
+// 未完了で期限切れのタスクを通知する
+export function doPostByNotCompleted() {
+  const table = NotionApi.getDatabase(DATABASE_ID, '未完了')
+  if (!table.length) return
+
+  const genMessage = (row: Result<any>): SlackField => {
     return {
-      title: `${row.properties[displayColumnName].title[0].plain_text}の終了まで${term}です`,
-      value: `<${row.url} | ${row.properties[displayColumnName].title[0].plain_text}>`,
+      title: `👉【${row.properties[tableColumnObj.title].title[0].plain_text}】のリマインド`,
+      value: `
+      タイトル：<${row.url} | ${row.properties[tableColumnObj.title].title[0].plain_text}>
+      内容：${row.properties[tableColumnObj.description].rich_text[0].plain_text}
+      ステータス：${row.properties[tableColumnObj.status].select.name}
+      通知日：${row.properties[tableColumnObj.noticeDate].date.start}
+      期限日：${row.properties[tableColumnObj.expiredDate].date.start}
+      `,
     }
   }
-  const fields: SlackField[] = checkDeadline(table, targetColumnName, genMessage)
+  const fields: SlackField[] = checkNoticeDate(table, genMessage)
   if (!fields.length) return
-  SlackApi.sendToSlack(SLACK_URL, fields, '締切が迫っています')
+  SlackApi.sendToSlack(SLACK_URL, fields, popUpTitle)
 }
