@@ -1,2 +1,3 @@
 node_modules/*
 .clasp.json
+.clasp_test.json_
